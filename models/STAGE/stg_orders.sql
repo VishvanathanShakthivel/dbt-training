@@ -1,0 +1,30 @@
+select 
+--FROM RAW_ORDERS
+    O.ORDER_ID,
+    O.ORDER_DATE,
+    O.SHIP_DATE,
+    O.SHIP_MODE,
+    O.ORDER_COST_PRICE,
+    O.ORDER_SELLING_PRICE,
+--FROM RAW_CUSTOMERS
+    C.CUSTOMER_ID,
+    C.CUSTOMER_NAME,
+    C.SEGMENT,
+    C.COUNTRY,
+    C.STATE,
+--FROM RAW_PRODUCT
+    P.PRODUCT_ID,
+    P.CATEGORY,
+    P.PRODUCT_NAME,
+    P.SUB_CATEGORY,
+    (O.ORDER_SELLING_PRICE - O.ORDER_COST_PRICE) as ORDER_PROFIT
+from 
+    {{ ref('RAW_ORDERS') }} as O
+left join
+    {{ ref('RAW_CUSTOMERS') }} as C
+on 
+    C.CUSTOMER_ID = O.CUSTOMER_ID
+left join
+    {{ ref('RAW_PRODUCT') }} as P
+on  
+    P.PRODUCT_ID = O.PRODUCT_ID
